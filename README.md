@@ -1,1 +1,3 @@
 # BIT_Deep_Learning_Fundamentals
+
+北京理工大学计科23级大二下深度学习基础赵三元老师班的作业
