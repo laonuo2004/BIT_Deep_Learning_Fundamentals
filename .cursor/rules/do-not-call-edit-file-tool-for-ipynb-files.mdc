@@ -1,0 +1,6 @@
+---
+description: 
+globs: *.ipynb
+alwaysApply: false
+---
+**注意：请不要直接调用 `edit_file` 工具编辑 `.ipynb` 文件，而是将相应的笔记直接输出出来。**

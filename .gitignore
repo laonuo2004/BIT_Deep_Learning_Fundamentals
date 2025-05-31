@@ -2,3 +2,5 @@
 .specstory/.what-is-this.md
 *.pdf
 *.zip
+**/data/*
+*.pth
