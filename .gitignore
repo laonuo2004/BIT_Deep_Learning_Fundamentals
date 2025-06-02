@@ -4,3 +4,4 @@
 *.zip
 **/data/*
 *.pth
+HW4/datasets/**
