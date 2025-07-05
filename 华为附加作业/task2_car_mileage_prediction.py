@@ -28,11 +28,12 @@ import pandas as pd
 from matplotlib import pyplot as plt
 
 import mindspore as ms
+import mindspore.ops as ops
 import mindspore.dataset as ds
 import mindspore.context as context
 import mindspore.dataset.transforms.c_transforms as C
 import mindspore.dataset.vision.c_transforms as CV
-from mindspore import nn, Tensor, value_and_grad
+from mindspore import nn, Tensor
 from mindspore.train import Model
 from mindspore.nn.metrics import Accuracy, MAE, MSE
 from mindspore.train.serialization import load_checkpoint, load_param_into_net
@@ -159,7 +160,7 @@ def forward_fn(inputs, targets):
     loss = loss_fn(logits, targets)
     return loss, logits
 
-grad_fn = ms.value_and_grad(forward_fn, None, optimizer.parameters, has_aux=True)
+grad_fn = ops.value_and_grad(forward_fn, None, optimizer.parameters, has_aux=True)
 
 #| ### 4.3 训练模型
 
