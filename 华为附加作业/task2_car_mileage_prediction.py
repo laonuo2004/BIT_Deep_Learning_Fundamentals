@@ -145,7 +145,7 @@ class RegressionNet(nn.Cell):
 #| ### 4.1 定义超参数、模型、损失函数和优化器
 
 #-
-epochs = 100
+epochs = 2000
 learning_rate = 0.001
 
 network = RegressionNet()
