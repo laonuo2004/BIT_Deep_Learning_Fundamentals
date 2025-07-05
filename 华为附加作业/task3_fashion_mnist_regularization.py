@@ -81,8 +81,8 @@ def get_data():
     test_image = read_image(os.path.join(cfg.data_dir_test, 't10k-images-idx3-ubyte'))
     test_label = read_label(os.path.join(cfg.data_dir_test, 't10k-labels-idx1-ubyte'))
     
-    train_x = train_image.reshape(-1, 1, cfg.image_height, cfg.image_width) / 255.0
-    test_x = test_image.reshape(-1, 1, cfg.image_height, cfg.image_width) / 255.0
+    train_x = train_image.reshape(-1, 1, cfg.image_height, cfg.image_width).astype(np.float32) / 255.0
+    test_x = test_image.reshape(-1, 1, cfg.image_height, cfg.image_width).astype(np.float32) / 255.0
     
     train_y = train_label.astype(np.int32)
     test_y = test_label.astype(np.int32)
