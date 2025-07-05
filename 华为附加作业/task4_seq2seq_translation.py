@@ -112,8 +112,6 @@ def prepareData(lang1, lang2):
             pairs.append([normalizeString(parts[0]), parts[1]]) # Keep Chinese part as is
 
     print(f"Read {len(pairs)} sentence pairs")
-    pairs = filterPairs(pairs)
-    print(f"Trimmed to {len(pairs)} sentence pairs")
     
     input_lang = Vocabulary(lang1)
     output_lang = Vocabulary(lang2)
