@@ -198,7 +198,7 @@ def train_and_eval(Net):
     model = Model(network, loss_fn=net_loss, optimizer=net_opt, metrics={'acc': Accuracy()})
     
     print(f"============== Starting Training for {Net.__name__} ==============")
-    model.train(cfg.epoch_size, ds_train, callbacks=[LossMonitor()], dataset_sink_mode=True)
+    model.train(cfg.epoch_size, ds_train, callbacks=[LossMonitor()], dataset_sink_mode=False)
     
     metric = model.eval(ds_test)
     print(f"============== Evaluation for {Net.__name__} ==============")
