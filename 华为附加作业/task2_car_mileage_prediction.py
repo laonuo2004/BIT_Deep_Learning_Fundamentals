@@ -152,15 +152,9 @@ network = RegressionNet()
 loss_fn = nn.MSELoss()
 optimizer = nn.RMSProp(network.trainable_params(), learning_rate=learning_rate)
 
-#| ### 4.2 定义前向传播函数（用于手动训练）
 
-#-
-def forward_fn(inputs, targets):
-    logits = network(inputs)
-    loss = loss_fn(logits, targets)
-    return loss, logits
 
-grad_fn = ops.value_and_grad(forward_fn, None, optimizer.parameters, has_aux=True)
+grad_fn = ops.GradOperation(get_by_list=True)
 
 #| ### 4.3 训练模型
 
@@ -176,7 +170,9 @@ Y_test = Tensor(test_labels.values.reshape(-1, 1), ms.float32)
 mae_metric = MAE()
 
 for epoch in range(epochs):
-    (loss, _), grads = grad_fn(X_train, Y_train)
+    # 手动计算梯度
+    loss = loss_fn(network(X_train), Y_train)
+    grads = grad_fn(network, optimizer.parameters)(X_train, Y_train)
     optimizer(grads)
 
     # 记录训练集指标
