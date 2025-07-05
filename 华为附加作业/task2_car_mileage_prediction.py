@@ -172,7 +172,7 @@ mae_metric = MAE()
 for epoch in range(epochs):
     # 手动计算梯度
     loss = loss_fn(network(X_train), Y_train)
-    grads = grad_fn(network, optimizer.parameters)(X_train, Y_train)
+    grads = grad_fn(network, optimizer.parameters)(X_train)
     optimizer(grads)
 
     # 记录训练集指标
