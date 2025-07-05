@@ -100,18 +100,47 @@ def filterPairs(pairs):
 
 def prepareData(lang1, lang2):
     print("Reading lines...")
+    
+    # 检查文件是否存在
+    import os
+    if not os.path.exists('cmn.txt'):
+        print("错误：找不到 cmn.txt 文件")
+        print("请确保 cmn.txt 文件在当前工作目录中")
+        print(f"当前工作目录：{os.getcwd()}")
+        return None, None, []
+    
     with open('cmn.txt', 'r', encoding='utf-8') as f:
-        lines = f.read().strip().split('\\n')
+        content = f.read().strip()
+        print(f"文件内容长度：{len(content)} 字符")
+        print(f"文件前100个字符：{repr(content[:100])}")
+        
+        # 修复：使用正确的转义字符
+        lines = content.split('\n')  # 使用 '\n' 而不是 '\\n'
 
+    print(f"共读取 {len(lines)} 行")
+    
     # Split every line into pairs, taking only the first two columns (English, Chinese)
     # And only normalize the English sentence
     pairs = []
-    for l in lines:
-        parts = l.split('\\t')
+    for i, l in enumerate(lines):
+        if not l.strip():  # 跳过空行
+            continue
+            
+        # 修复：使用正确的转义字符
+        parts = l.split('\t')  # 使用 '\t' 而不是 '\\t'
+        
         if len(parts) >= 2:
             pairs.append([normalizeString(parts[0]), parts[1]]) # Keep Chinese part as is
+        else:
+            if i < 5:  # 只打印前5行的调试信息
+                print(f"第 {i+1} 行格式不正确，parts数量：{len(parts)}, 内容：{repr(l[:50])}")
 
     print(f"Read {len(pairs)} sentence pairs")
+    
+    if len(pairs) == 0:
+        print("警告：没有读取到任何有效的句子对！")
+        print("请检查文件格式是否正确（应该是制表符分隔的格式）")
+        return None, None, []
     
     input_lang = Vocabulary(lang1)
     output_lang = Vocabulary(lang2)
@@ -127,7 +156,19 @@ def prepareData(lang1, lang2):
     return input_lang, output_lang, pairs
 
 input_lang, output_lang, pairs = prepareData('eng', 'cmn')
-print("\\nRandom pair:", random.choice(pairs))
+
+# 添加安全检查
+if pairs and len(pairs) > 0:
+    print(f"\nRandom pair: {random.choice(pairs)}")
+    print(f"样本总数：{len(pairs)}")
+    print(f"第一个样本：{pairs[0]}")
+else:
+    print("\n错误：没有成功读取到数据，无法继续执行")
+    print("请检查以下问题：")
+    print("1. cmn.txt 文件是否存在")
+    print("2. 文件格式是否正确（制表符分隔）")
+    print("3. 文件编码是否为 UTF-8")
+    exit(1)
 
 
 #| ### 2.4 数据转换与Dataset创建
