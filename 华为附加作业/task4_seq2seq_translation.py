@@ -196,9 +196,10 @@ def create_dataset(pairs, batch_size):
     
     dataset = GeneratorDataset(generator, column_names=["input", "input_len", "target", "target_len"])
     
-    dataset = dataset.padded_batch(batch_size, 
-                                   pad_info={"input": ([MAX_LENGTH + 1], 0), 
-                                             "target": ([MAX_LENGTH + 1], 0)})
+    dataset = dataset.batch(batch_size,
+                            drop_remainder=True,
+                            pad_info={"input": ([MAX_LENGTH + 1], 0),
+                                      "target": ([MAX_LENGTH + 1], 0)})
     return dataset
 
 train_dataset = create_dataset(pairs, Config.batch_size)
