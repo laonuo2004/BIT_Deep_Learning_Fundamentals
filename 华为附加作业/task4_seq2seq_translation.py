@@ -35,17 +35,9 @@ context.set_context(mode=context.GRAPH_MODE, device_target="Ascend")
 #| 我们首先下载英-中平行语料库。
 
 #-
-#!wget -N https://obs.dualstack.cn-north-4.myhuaweicloud.com/mindspore-website/notebook/datasets/eng-fra.txt
-with open('eng-fra.txt', 'r', encoding='utf-8') as f:
-    lines = f.read().strip().split('\\n')
+#!wget -N https://obs.dualstack.cn-north-4.myhuaweicloud.com/mindspore-website/notebook/datasets/eng-fra.txt -O eng-fra.txt
 
-pairs = [[s for s in l.split('\\t')] for l in lines]
-# For this experiment, we only use Chinese instead of French
-for pair in pairs:
-    pair[1] = pair[2]
-    del pair[2]
-
-print("数据样本: ", random.choice(pairs))
+#| ### 2.2 定义配置和词典类
 
 #| ### 2.2 定义配置和词典类
 #|
@@ -113,6 +105,14 @@ def filterPairs(pairs):
 
 def prepareData(lang1, lang2, reverse=False):
     print("Reading lines...")
+    with open('eng-fra.txt', 'r', encoding='utf-8') as f:
+        lines = f.read().strip().split('\\n')
+    
+    pairs = [[s for s in l.split('\\t')] for l in lines]
+    for pair in pairs:
+        pair[1] = pair[2]
+        del pair[2]
+        pair[0] = normalizeString(pair[0])
     with open('eng-fra.txt', 'r', encoding='utf-8') as f:
         lines = f.read().strip().split('\\n')
     
