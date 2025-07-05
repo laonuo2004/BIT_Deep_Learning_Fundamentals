@@ -154,9 +154,17 @@ optimizer = nn.RMSProp(network.trainable_params(), learning_rate=learning_rate)
 
 
 
+#| ### 4.3 包装网络并定义梯度计算
+#| 为了正确计算梯度，我们必须对一个能够同时计算前向传播和损失的“包装网络”进行微分。
+#| `nn.WithLossCell` 正是为此设计的。它将原始网络和损失函数结合在一起。
+#| 然后，我们使用 `ops.GradOperation` 来为这个新的“损失网络”创建梯度计算函数。
+#| **学生视角思考**: 这是最关键的一步，之前的失败就是因为微分的对象错了。我们必须对“损失”求导，而不是对“网络输出”求导。
+
+#-
+loss_net = nn.WithLossCell(network, loss_fn)
 grad_fn = ops.GradOperation(get_by_list=True)
 
-#| ### 4.3 训练模型
+#| ### 4.4 训练模型
 
 #-
 history = {'train_loss': [], 'train_mae': [], 'test_loss': [], 'test_mae': []}
@@ -170,9 +178,11 @@ Y_test = Tensor(test_labels.values.reshape(-1, 1), ms.float32)
 mae_metric = MAE()
 
 for epoch in range(epochs):
-    # 手动计算梯度
-    loss = loss_fn(network(X_train), Y_train)
-    grads = grad_fn(network, optimizer.parameters)(X_train)
+    # 首先，通过包装好的loss_net计算损失值
+    loss = loss_net(X_train, Y_train)
+    # 然后，计算loss_net关于权重的梯度
+    grads = grad_fn(loss_net, optimizer.parameters)(X_train, Y_train)
+    # 使用优化器更新权重
     optimizer(grads)
 
     # 记录训练集指标
