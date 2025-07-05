@@ -282,7 +282,7 @@ class Seq2Seq(nn.Cell):
 class MaskedNLLLoss(nn.Cell):
     def __init__(self):
         super(MaskedNLLLoss, self).__init__()
-        self.loss = nn.NLLLoss(reduction='none')
+        self.loss = nn.loss.NLLLoss(reduction='none')
     
     def construct(self, inp, target, mask):
         mask = mask.astype(mindspore.float32)
