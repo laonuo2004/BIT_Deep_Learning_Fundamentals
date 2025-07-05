@@ -451,12 +451,16 @@ def train_model():
         import torch
         
         # 检查设备
-        device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        print(f"🖥️ 使用设备: {device}")
-        
-        if device == 'cuda':
-            print(f"🔥 GPU信息: {torch.cuda.get_device_name(0)}")
-            print(f"💾 GPU内存: {torch.cuda.get_device_properties(0).total_memory / 1024**3:.1f}GB")
+        if torch.cuda.is_available():
+            # 只使用GPU 0和1
+            device = [0, 1]
+            print(f"🖥️ 使用指定的 {len(device)} 个GPU进行分布式训练: {device}")
+            
+            for i in device:
+                print(f"  GPU {i}: {torch.cuda.get_device_name(i)} ({torch.cuda.get_device_properties(i).total_memory / 1024**3:.1f}GB)")
+        else:
+            device = 'cpu'
+            print("🖥️ 使用CPU进行训练")
         
         # 加载模型 - 这里我们使用YOLOv8s
         print("📦 初始化YOLOv8s模型...")
@@ -465,8 +469,8 @@ def train_model():
         # 训练配置
         train_config = {
             'data': 'config/data.yaml',
-            'epochs': 100,
-            'batch': 16 if device == 'cuda' else 8,  # 根据设备调整batch size
+            'epochs': 1,
+            'batch': 384,  # 使用2卡A100，可以加大batch size
             'imgsz': 640,
             'device': device,
             'amp': True,      # 自动混合精度
