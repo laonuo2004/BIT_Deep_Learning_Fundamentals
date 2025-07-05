@@ -32,7 +32,7 @@ import mindspore.dataset as ds
 import mindspore.context as context
 import mindspore.dataset.transforms.c_transforms as C
 import mindspore.dataset.vision.c_transforms as CV
-from mindspore import nn, Tensor
+from mindspore import nn, Tensor, value_and_grad
 from mindspore.train import Model
 from mindspore.nn.metrics import Accuracy, MAE, MSE
 from mindspore.train.serialization import load_checkpoint, load_param_into_net
