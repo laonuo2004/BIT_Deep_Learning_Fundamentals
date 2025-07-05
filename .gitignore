@@ -5,3 +5,8 @@
 **/data/*
 *.pth
 HW4/datasets/**
+**/docs/**
+大作业/dl_detection2024
+大作业/starting_kit/test.csv
+dl_detection/
+*.pt

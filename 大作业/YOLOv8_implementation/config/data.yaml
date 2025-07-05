@@ -1,0 +1,25 @@
+names:
+- backpack
+- cup
+- bowl
+- banana
+- apple
+- orange
+- chair
+- couch
+- potted plant
+- bed
+- dining table
+- laptop
+- mouse
+- keyboard
+- cell phone
+- book
+- clock
+- vase
+- scissors
+- hair drier
+- toothbrush
+nc: 21
+train: data\yolo_dataset\train\images
+val: data\yolo_dataset\val\images
